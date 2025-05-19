@@ -6,8 +6,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class JokeController {
 
+    @GetMapping("/jokes/secure")
+    public String getJokesSecure() {
+        return "Hello from SECURE jokeService!";
+    }
+
+    @GetMapping("/jokes/public")
+    public String getJokesPublic() {
+        return "Hello from PUBLIC jokeService!";
+    }
+
     @GetMapping("/jokes/random")
-    public String getRandomJoke() {
-        return "Hello from jokeService!";
+    public String getJokesRandom() {
+        return "Hello from RANDOM jokeService!";
     }
 }
