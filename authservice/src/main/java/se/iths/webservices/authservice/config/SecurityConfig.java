@@ -7,6 +7,7 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -88,11 +89,11 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .authorizeHttpRequests(auth -> auth
+                    .anyRequest().authenticated()
+                )
                 .formLogin(Customizer.withDefaults())
-                .authorizeHttpRequests(auth -> {
-                    //auth.requestMatchers("/open").permitAll();
-                    auth.anyRequest().authenticated();
-                });
+        ;
 
         return http.build();
     }
@@ -113,12 +114,22 @@ public class SecurityConfig {
 			.oidcUserInfoEndpoint("/userinfo")
 			.oidcClientRegistrationEndpoint("/connect/register");
      */
-    @Bean
-    public AuthorizationServerSettings authorizationServerSettings() {
-        return AuthorizationServerSettings.builder()
-                .issuer("http://localhost:9000")
-                .build();
-    }
+//    @Bean
+//    @Profile("!docker")
+//    public AuthorizationServerSettings authorizationServerSettings() {
+//        return AuthorizationServerSettings.builder()
+//                .issuer("http://localhost:9000")
+//                .build();
+//    }
+
+    // issuer for docker container
+//    @Bean
+//    @Profile("docker")
+//    public AuthorizationServerSettings dockerAuthorizationServerSettings() {
+//        return AuthorizationServerSettings.builder()
+//                .issuer("http://auth:9000")
+//                .build();
+//    }
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -176,22 +187,38 @@ public class SecurityConfig {
     @Bean
     public RegisteredClientRepository registeredClientRepository(PasswordEncoder encoder) {
 
-        RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("jokeservice")
-                .clientSecret(encoder.encode("secret"))
+//        RegisteredClient jokeserviceClient = RegisteredClient.withId(UUID.randomUUID().toString())
+//                .clientId("jokeservice")
+//                .clientSecret(encoder.encode("secret"))
+//                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+//                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+//                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+//                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+//                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/jokeservice")
+//                .scope(OidcScopes.OPENID)
+//                .scope("scope-a")
+//                .clientSettings(ClientSettings.builder()
+//                        //.requireAuthorizationConsent(true)
+//                        .build())
+//                .build();
+
+        RegisteredClient gatewayClient = RegisteredClient.withId("gateway-client")
+                .clientId("gateway-client-id")
+                .clientSecret(encoder.encode("gateway-client-secret"))
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/jokeservice")
+                .redirectUri("http://localhost:8080/login/oauth2/code/gateway-client")
                 .scope(OidcScopes.OPENID)
                 .scope("scope-a")
                 .clientSettings(ClientSettings.builder()
+                        .requireAuthorizationConsent(false)
                         //.requireAuthorizationConsent(true)
                         .build())
                 .build();
 
-        return new InMemoryRegisteredClientRepository(registeredClient);
+        return new InMemoryRegisteredClientRepository(gatewayClient);
     }
 
     @Bean
