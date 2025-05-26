@@ -1,60 +1,27 @@
 server:
-  port:
-    8080
-  forward-headers-strategy:
-    framework
+  port: 8080
+  forward-headers-strategy: framework
   servlet:
     session:
       cookie:
-        name:
-          GATEWAY_SESSION
+        name: GATEWAY_SESSION
 
 
 spring:
   application:
-    name:
-      gatewayservice
-
-  # Machine - to - Machine
-  # Client Credentials Flow
-  # The gateway is an oauth2 client which have a client-id and a client-secret (the gateways credentials) to identity itself to the auth-server.
-  # The auth-server has stored the gateway as a RegisteredClient with its credentials so it knows of its client-id and client-secret.
-  #
-  security:
-    oauth2:
-      client:
-        registration:
-          gateway-client:
-            provider: auth-server # The provider of the authentication is the auth-service which is defined below
-            client-id: gateway-client-id
-            client-secret: gateway-client-secret
-            client-authentication-method: client_secret_basic
-            authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8080/login/oauth2/code/gateway-client
-            #redirect-uri: http://localhost:8080/done
-            scope:
-              - openid
-              - scope-a
-        provider:
-          auth-server:
-            authorization-uri: http://localhost:9000/oauth2/authorize
-            token-uri: http://localhost:9000/oauth2/token
-            jwk-set-uri: http://localhost:9000/oauth2/jwks
-            user-info-uri: http://localhost:9000/userinfo
-
-
+    name: gatewayservice
   cloud:
     gateway:
       mvc:
         routes:
-          # To get to this endpoint the request must be authenticated
           - id: jokes_random_route
-            uri: http://localhost:8090
+            uri: http://localhost:8000
             predicates:
               - Path=/jokes/random
-            #filters:
-              #- RewritePath=/(?<segment>.*), /jokes/random    # Every request to localhost:8090 will be "redirected" to localhost:8090/jokes/random
-              #- RewritePath=/jokeservice/?(?<segment>.*), /$\{segment}
+          - id: quotes_random_route
+            uri: http://localhost:8001
+            predicates:
+              - Path=/quotes/random
 
 logging:
   level:
