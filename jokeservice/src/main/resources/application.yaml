@@ -1,25 +1,19 @@
 server:
-  port:
-    8090
-  forward-headers-strategy:
-    framework
+  port: 8000
+  forward-headers-strategy: framework
 
 spring:
   application:
-    name:
-      jokeservice
+    name: jokeservice
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri:
-            http://localhost:9000
+          issuer-uri: http://localhost:9000
 
 logging:
   level:
     org:
       springframework:
-        web:
-          DEBUG
-        security:
-          DEBUG
+        web: DEBUG
+        security: DEBUG

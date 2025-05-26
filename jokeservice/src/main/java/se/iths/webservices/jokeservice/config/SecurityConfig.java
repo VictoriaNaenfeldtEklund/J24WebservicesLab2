@@ -12,18 +12,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // SecurityFilterChain without security for easier development purpose.
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//
-//        http
-//                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-//                .csrf(AbstractHttpConfigurer::disable)
-//        ;
-//
-//        return http.build();
-//    }
-
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -31,7 +19,6 @@ public class SecurityConfig {
                 .sessionManagement(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/jokes/public").permitAll()
                         .anyRequest().authenticated()
                 )
                 // The oauth2ResourceServer() method sets up the application as an OAuth2 resource server,
