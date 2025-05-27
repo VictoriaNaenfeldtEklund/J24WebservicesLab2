@@ -1,14 +1,14 @@
 server:
-  port: 8001
+  port: 8000
 
 spring:
   application:
-    name: quoteservice
+    name: jokeservice
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9000
+          issuer-uri: http://authservice:9000
 
 logging:
   level:
