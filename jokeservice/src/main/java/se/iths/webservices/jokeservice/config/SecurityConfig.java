@@ -21,8 +21,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().authenticated()
                 )
-                // The oauth2ResourceServer() method sets up the application as an OAuth2 resource server,
-                // and that JWT authentication will be used with default customizers.
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
         ;
 
