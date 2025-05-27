@@ -9,11 +9,11 @@ spring:
       mvc:
         routes:
           - id: jokes_random_route
-            uri: http://localhost:8000
+            uri: http://jokeservice:8000
             predicates:
               - Path=/jokes/random
           - id: quotes_random_route
-            uri: http://localhost:8001
+            uri: http://quoteservice:8001
             predicates:
               - Path=/quotes/random
 

@@ -1,6 +1,5 @@
 server:
   port: 7000
-  #forward-headers-strategy: framework
   servlet:
     session:
       cookie:
@@ -13,11 +12,6 @@ logging:
         web: DEBUG
         security: DEBUG
 
-# Machine - to - Machine
-# Client Credentials Flow
-# The gateway is an oauth2 client which have a client-id and a client-secret (the gateways credentials) to identity itself to the auth-server.
-# The auth-server has stored the gateway as a RegisteredClient with its credentials so it knows of its client-id and client-secret.
-#
 spring:
   application:
     name: clientservice

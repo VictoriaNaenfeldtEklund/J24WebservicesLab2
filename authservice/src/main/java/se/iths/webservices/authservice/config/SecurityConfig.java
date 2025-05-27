@@ -45,7 +45,8 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
-                );
+                )
+        ;
 
         return http.build();
     }
